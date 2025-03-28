@@ -16,8 +16,8 @@ function Task({ title, category, isChecked }: TaskProps) {
       <View className="h-20 flex-row w-full border-opacity-50">
         {/* Checkbox */}
         <Checkbox
-          className={`h-5 w-5 border-2 ${
-            checked ? "border-white bg-white" : "border-white bg-white"
+          className={`h-5 w-5 border-2 mt-3  ${
+            checked ? "border-white bg-white" : "border-white bg-white "
           }`}
           checked={checked}
           onCheckedChange={setChecked}
