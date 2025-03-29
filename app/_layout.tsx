@@ -10,6 +10,7 @@ import HomeScreen from "./index";
 import SettingsScreen from "./settings";
 import ToDoScreen from "./ToDo";
 import Svg, { Path } from "react-native-svg";
+import { router } from "expo-router";
 
 const Tab = createBottomTabNavigator();
 
@@ -132,10 +133,14 @@ export default function RootLayout() {
       />
       <Tab.Screen
         name="addTask"
-        component={() => null} // This will not display a screen, just a button
+        component={() => null} // This is not a screen, just the button
         options={{
           tabBarIcon: ({ color, size }) => (
-            <AddTask color={color} size={size} />
+            <TouchableOpacity
+              onPress={() => router.push("/edit")} // This will navigate to the edit.tsx page
+            >
+              <AddTask color={color} size={size} />
+            </TouchableOpacity>
           ),
         }}
       />
