@@ -63,7 +63,7 @@ export default function ToDo() {
       {/* Header with Arrow and HallPass text */}
       <TouchableOpacity
         className="flex-row items-center mb-6"
-        onPress={() => router.push("/settings")}
+        onPress={() => router.push("/")}
       >
         <Image
           source={require("../assets/images/webp/arrow-1.svg")} // Adjust the path as needed
