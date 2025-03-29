@@ -19,7 +19,7 @@ function Task({ title, category, isChecked, id }: TaskProps) {
       style={{ marginBottom: 10 }} // Give some space between tasks for easier clicking
     >
       {/* The View inside TouchableOpacity */}
-      <View className="pl-20 pr-10 py-4 bg-orange-700 rounded-lg">
+      <View className="pl-20 pr-10 py-4 bg-blue-700 rounded-lg">
         <View className="h-20 flex-row w-full border-opacity-50">
           {/* Checkbox */}
           <Checkbox
