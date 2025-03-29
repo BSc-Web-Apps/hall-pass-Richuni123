@@ -7,33 +7,40 @@ interface TaskProps {
   title: string;
   category: string;
   isChecked: boolean;
+  id: number; // Add the task ID prop to uniquely identify each task
 }
 
-function Task({ title, category, isChecked }: TaskProps) {
+function Task({ title, category, isChecked, id }: TaskProps) {
   const [checked, setChecked] = React.useState(isChecked);
 
   return (
-    <View className="pl-20 pr-10 py-4">
-      <View className="h-20 flex-row w-full border-opacity-50">
-        {/* Checkbox */}
-        <Checkbox
-          className={`h-5 w-5 border-2 mt-3  ${
-            checked ? "border-white bg-white" : "border-white bg-white "
-          }`}
-          checked={checked}
-          onCheckedChange={setChecked}
-        />
+    <TouchableOpacity
+      onPress={() => router.push("/edit")} // Make sure this routes to the correct page
+      style={{ marginBottom: 10 }} // Give some space between tasks for easier clicking
+    >
+      {/* The View inside TouchableOpacity */}
+      <View className="pl-20 pr-10 py-4 bg-orange-700 rounded-lg">
+        <View className="h-20 flex-row w-full border-opacity-50">
+          {/* Checkbox */}
+          <Checkbox
+            className={`h-5 w-5 border-2 mt-3 ${
+              checked ? "border-white bg-white" : "border-white bg-white "
+            }`}
+            checked={checked}
+            onCheckedChange={setChecked}
+          />
 
-        {/* Task details */}
-        <View className="flex-1 ml-4 mt-2">
-          <Text className={`text-white ${checked ? "line-through" : ""}`}>
-            {title}
-          </Text>
-          <Text className="text-white opacity-50">{category}</Text>
-          <View className="border-b-2 border-white opacity-50 mt-2 w-full" />
+          {/* Task details */}
+          <View className="flex-1 ml-4 mt-2">
+            <Text className={`text-white ${checked ? "line-through" : ""}`}>
+              {title}
+            </Text>
+            <Text className="text-white opacity-50">{category}</Text>
+            <View className="border-b-2 border-white opacity-50 mt-2 w-full" />
+          </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -53,9 +60,10 @@ export default function ToDo() {
 
   return (
     <ScrollView className="flex flex-1 py-8 bg-background">
+      {/* Header with Arrow and HallPass text */}
       <TouchableOpacity
-        className="flex-row items-center"
-        onPress={() => router.push("/")}
+        className="flex-row items-center mb-6"
+        onPress={() => router.push("/settings")}
       >
         <Image
           source={require("../assets/images/webp/arrow-1.svg")} // Adjust the path as needed
@@ -64,9 +72,12 @@ export default function ToDo() {
         />
         <Text className="text-white text-lg">HallPass</Text>
       </TouchableOpacity>
+
+      {/* Map through tasks and pass task ID to each Task component */}
       {tasks.map((task) => (
         <Task
           key={task.id}
+          id={task.id} // Pass the task ID as a prop to each Task component
           title={task.title}
           category={task.category}
           isChecked={task.isChecked}

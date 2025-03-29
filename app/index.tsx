@@ -19,7 +19,7 @@ export default function HomeScreen() {
 
   const handleGetStarted = () => {
     console.log("Button pressed"); // For debugging
-    router.push("/todo"); // Matches your file name exactly
+    router.push("/ToDo"); // Matches your file name exactly
   };
 
   return (
