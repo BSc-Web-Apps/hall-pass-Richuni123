@@ -62,12 +62,12 @@ export default function ToDo() {
     <ScrollView className="flex flex-1 py-8 bg-background">
       {/* Header with Arrow and HallPass text */}
       <TouchableOpacity
-        className="flex-row items-center mb-6"
+        className="flex-row justify-center items-center mb-6"
         onPress={() => router.push("/")}
       >
         <Image
-          source={require("../assets/images/webp/arrow-1.svg")} // Adjust the path as needed
-          className="h-5 w-5 mr-2"
+          source={require("../assets/images/webp/arrow-1.svg")}
+          style={{ width: 30, height: 30 }}
           resizeMode="contain"
         />
         <Text className="text-white text-lg">HallPass</Text>
