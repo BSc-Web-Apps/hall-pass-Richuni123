@@ -1,16 +1,14 @@
-import "~/global.css";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as React from "react";
-import { Platform, TouchableOpacity } from "react-native";
+import { Platform } from "react-native";
+import Svg, { Path } from "react-native-svg";
+import "~/global.css";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
-import { Home as HomeIcon } from "~/lib/icons/Home";
 import { Info } from "~/lib/icons/Info";
 import { useColorScheme } from "~/lib/useColorScheme";
+import AddTaskScreen from "./addTask";
 import HomeScreen from "./index";
 import SettingsScreen from "./settings";
-import ToDoScreen from "./ToDo";
-import Svg, { Path } from "react-native-svg";
-import { router } from "expo-router";
 
 const Tab = createBottomTabNavigator();
 
@@ -45,7 +43,7 @@ function TaskIcon({ color, size }: { color: string; size: number }) {
     </Svg>
   );
 }
-function AddTask({ color, size }: { color: string; size: number }) {
+function AddTaskIcon() {
   return (
     <Svg width="88" height="88" viewBox="0 0 88 88" fill="none">
       <Path
@@ -94,7 +92,7 @@ export default function RootLayout() {
 
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={{
         headerShown: false,
         tabBarStyle: {
           backgroundColor: "hsl(11, 72%, 3%)",
@@ -108,11 +106,11 @@ export default function RootLayout() {
         tabBarIconStyle: {
           marginBottom: 2,
         },
-      })}
+      }}
     >
       <Tab.Screen
-        name="todo"
-        component={ToDoScreen}
+        name="Home"
+        component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <TaskIcon color={color} size={size} />
@@ -126,16 +124,11 @@ export default function RootLayout() {
         }}
       />
       <Tab.Screen
-        name="addTask"
-        component={() => null} // This is not a screen, just the button
+        name="Add Task"
+        component={AddTaskScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <TouchableOpacity
-              onPress={() => router.push("/edit")} // This will navigate to the edit.tsx page
-            >
-              <AddTask color={color} size={size} />
-            </TouchableOpacity>
-          ),
+          tabBarIcon: () => <AddTaskIcon />,
+          tabBarLabel: "Add Task",
         }}
       />
       <Tab.Screen
