@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Text, View, TextInput, TouchableOpacity } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
@@ -14,6 +14,7 @@ export default function AddTaskScreen() {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  const taskInputRef = useRef<TextInput | null>(null);
 
   const categories = ["Work", "Personal", "Urgent", "Shopping", "Other"];
 
@@ -52,30 +53,35 @@ export default function AddTaskScreen() {
       />
     </Svg>
   );
+  const categoryIcon = (
+    <Svg width="16" height="20" viewBox="0 0 16 20" fill="none">
+      <Path
+        d="M0.5 1.45654H6.45652V8.10872H0.5V1.45654ZM9.54348 1.45654H15.5V8.10872H9.54348V1.45654ZM0.5 11.8913H6.45652V18.5435H0.5V11.8913ZM9.54348 11.8913H15.5V18.5435H9.54348V11.8913Z"
+        stroke="#EBD5D1"
+      />
+    </Svg>
+  );
 
   return (
     <View className="flex-1 justify-center items-center bg-background p-4">
       {/* Task Section */}
       <TouchableOpacity
-        onPress={() => setIsTaskClicked(true)}
+        onPress={() => {
+          setIsTaskClicked(true);
+          taskInputRef.current?.focus(); // Automatically focus input
+        }}
         className="w-full mb-4 p-4 border border-gray-300 rounded-lg"
       >
         <View className="relative flex-row items-center">
           {timeIcon}
-          {!isTaskClicked && (
-            <Text className="absolute top-1/2 left-10 transform -translate-y-1/2 text-gray-400">
-              Task
-            </Text>
-          )}
-          {isTaskClicked && (
-            <TextInput
-              value={taskText}
-              onChangeText={setTaskText}
-              placeholder="Enter your task"
-              className="text-foreground"
-              style={{ paddingLeft: 10, paddingVertical: 5 }}
-            />
-          )}
+          <TextInput
+            ref={taskInputRef}
+            value={taskText}
+            onChangeText={setTaskText}
+            placeholder="Enter your task"
+            className="text-foreground"
+            style={{ paddingLeft: 10, paddingVertical: 5 }}
+          />
         </View>
       </TouchableOpacity>
 
@@ -84,8 +90,9 @@ export default function AddTaskScreen() {
         onPress={() => setIsCategoryVisible(!isCategoryVisible)}
         className="w-full mb-4 p-4 border border-gray-300 rounded-lg"
       >
-        <View className="relative">
-          <Text className="absolute top-1/2 left-2 transform -translate-y-1/2 text-gray-400">
+        {categoryIcon}
+        <View className="relative ">
+          <Text className="absolute top-1/2 left-2 transform -translate-y-1/2 text-orange-400">
             {selectedCategory ? selectedCategory : "Category"}
           </Text>
         </View>
@@ -151,7 +158,7 @@ export default function AddTaskScreen() {
           </TouchableOpacity>
           {showStartDatePicker && (
             <DateTimePicker
-              value={startDate || new Date()}
+              value={startDate ?? new Date()}
               mode="date"
               display="default"
               onChange={onStartDateChange}

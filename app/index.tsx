@@ -52,7 +52,7 @@ export default function HomeScreen() {
   ];
 
   return (
-    <View className="flex flex-1 bg-background">
+    <ScrollView className="flex flex-1 bg-background">
       {/* HallPass Title with Checkmark */}
       <View className="w-full pt-20 pb-6 flex-row items-center justify-center">
         <Text className="text-4xl font-bold text-white mr-2">HallPass</Text>
@@ -98,6 +98,6 @@ export default function HomeScreen() {
           />
         ))}
       </ScrollView>
-    </View>
+    </ScrollView>
   );
 }
