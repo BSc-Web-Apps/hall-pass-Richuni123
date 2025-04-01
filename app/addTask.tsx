@@ -1,5 +1,11 @@
 import React, { useRef, useState } from "react";
-import { Text, View, TextInput, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import Svg, { Path } from "react-native-svg";
@@ -15,6 +21,9 @@ export default function AddTaskScreen() {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const taskInputRef = useRef<TextInput | null>(null);
+
+  const [isNotesClicked, setIsNotesClicked] = useState(false); // State to track focus
+  const notesInputRef = useRef<TextInput | null>(null); // Reference for the input
 
   const categories = ["Work", "Personal", "Urgent", "Shopping", "Other"];
 
@@ -74,6 +83,10 @@ export default function AddTaskScreen() {
       >
         <View className="relative flex-row items-center">
           {timeIcon}
+
+          {/* Conditionally render the "Task" text based on the input focus */}
+          {!isTaskClicked && <Text className="ml-2 text-gray-400">Task</Text>}
+
           <TextInput
             ref={taskInputRef}
             value={taskText}
@@ -81,6 +94,8 @@ export default function AddTaskScreen() {
             placeholder="Enter your task"
             className="text-foreground"
             style={{ paddingLeft: 10, paddingVertical: 5 }}
+            onFocus={() => setIsTaskClicked(true)} // Focus handler to hide the text
+            onBlur={() => setIsTaskClicked(false)} // Blur handler to show the text when input loses focus
           />
         </View>
       </TouchableOpacity>
@@ -90,9 +105,9 @@ export default function AddTaskScreen() {
         onPress={() => setIsCategoryVisible(!isCategoryVisible)}
         className="w-full mb-4 p-4 border border-gray-300 rounded-lg"
       >
-        {categoryIcon}
-        <View className="relative ">
-          <Text className="absolute top-1/2 left-2 transform -translate-y-1/2 text-orange-400">
+        <View className="flex-row items-center">
+          {categoryIcon}
+          <Text className="ml-2 text-orange-400">
             {selectedCategory ? selectedCategory : "Category"}
           </Text>
         </View>
@@ -118,19 +133,35 @@ export default function AddTaskScreen() {
 
       {/* Notes Section */}
       <View className="w-full mb-4 p-4 border border-gray-300 rounded-lg">
-        <View className="flex-row items-center">
-          {pencilIcon}
-          <Text className="ml-2 text-gray-400">Notes</Text>
-        </View>
-        <TextInput
-          value={notes}
-          onChangeText={setNotes}
-          placeholder="Enter notes"
-          multiline
-          numberOfLines={4}
-          className="text-foreground"
-          style={{ paddingLeft: 10, paddingVertical: 5, height: 100 }}
-        />
+        <TouchableOpacity
+          onPress={() => {
+            setIsNotesClicked(true);
+            notesInputRef.current?.focus(); // Automatically focus input
+          }}
+          className="w-full"
+        >
+          <View className="relative flex-row items-center">
+            {pencilIcon}
+
+            {/* Conditionally render the "Notes" text based on the input focus */}
+            {!isNotesClicked && (
+              <Text className="ml-2 text-gray-400">Notes</Text>
+            )}
+
+            <TextInput
+              ref={notesInputRef}
+              value={notes}
+              onChangeText={setNotes}
+              placeholder="Enter notes"
+              multiline
+              numberOfLines={4}
+              className="text-foreground"
+              style={{ paddingLeft: 10, paddingVertical: 5, height: 50 }}
+              onFocus={() => setIsNotesClicked(true)} // Focus handler to hide the text
+              onBlur={() => setIsNotesClicked(false)} // Blur handler to show the text when input loses focus
+            />
+          </View>
+        </TouchableOpacity>
       </View>
 
       {/* Start Date and End Date Section */}
