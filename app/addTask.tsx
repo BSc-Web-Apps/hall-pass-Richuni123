@@ -5,7 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Alert,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
@@ -48,6 +47,10 @@ export default function AddTaskScreen() {
     const currentDate = selectedDate || endDate;
     setEndDate(currentDate);
     setShowEndDatePicker(false);
+  };
+  const handleSave = () => {
+    // Handle the save action here
+    console.log("Save task button clicked");
   };
 
   const pencilIcon = (
@@ -189,7 +192,7 @@ export default function AddTaskScreen() {
       </View>
 
       {/* Start Date and End Date Section */}
-      <View className="flex-row w-full mb-4">
+      <View className="flex-row w-full ">
         {/* Start Date */}
         <View className="flex-1 mr-2">
           <TouchableOpacity
@@ -251,6 +254,10 @@ export default function AddTaskScreen() {
             />
           )}
         </View>
+      </View>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <TouchableOpacity onPress={handleSave}>{SaveTaskIcon}</TouchableOpacity>
+        <Text>Click the icon to save your task</Text>
       </View>
     </View>
   );
