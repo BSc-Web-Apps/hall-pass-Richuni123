@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as React from "react";
 import { Platform } from "react-native";
 import Svg, { Path } from "react-native-svg";
+import { useState, useEffect } from "react";
 import "~/global.css";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import { Info } from "~/lib/icons/Info";
@@ -9,6 +10,7 @@ import { useColorScheme } from "~/lib/useColorScheme";
 import AddTaskScreen from "./addTask";
 import HomeScreen from "./index";
 import SettingsScreen from "./settings";
+import LandingPage from "./landingpage";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,6 +19,7 @@ export {
   ErrorBoundary,
 } from "expo-router";
 
+// Task Icon component for the bottom tab
 function TaskIcon({ color, size }: { color: string; size: number }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 22 22">
@@ -43,6 +46,8 @@ function TaskIcon({ color, size }: { color: string; size: number }) {
     </Svg>
   );
 }
+
+// Add Task Icon
 function AddTaskIcon() {
   return (
     <Svg width="88" height="88" viewBox="0 0 88 88" fill="none">
@@ -67,10 +72,14 @@ function AddTaskIcon() {
   );
 }
 
+// Root layout - Manages rendering of either Landing Page or Tab Navigator
 export default function RootLayout() {
   const hasMounted = React.useRef(false);
   const { colorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
+
+  // State to manage Landing Page visibility
+  const [isLandingPage, setIsLandingPage] = useState(true);
 
   useIsomorphicLayoutEffect(() => {
     if (hasMounted.current) {
@@ -91,57 +100,62 @@ export default function RootLayout() {
   }
 
   return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: "hsl(11, 72%, 3%)",
-          borderTopColor: "transparent",
-          height: 60,
-          paddingBottom: 5,
-        },
-        tabBarActiveTintColor: "hsl(11, 100%, 60%)",
-        tabBarInactiveTintColor: "hsla(11, 20%, 64%, 0.5)",
-        tabBarLabelPosition: "below-icon",
-        tabBarIconStyle: {
-          marginBottom: 2,
-        },
-      }}
-    >
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <TaskIcon color={color} size={size} />
-          ),
-          tabBarLabel: "Tasks",
-          tabBarLabelStyle: {
-            color: "hsl(11, 100%, 60%)",
-            fontSize: 12,
-            paddingTop: 2,
-          },
-        }}
-      />
-      <Tab.Screen
-        name="Add Task"
-        component={AddTaskScreen}
-        options={{
-          tabBarIcon: () => <AddTaskIcon />,
-          tabBarLabel: "Add Task",
-        }}
-      />
-      <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => <Info size={size} color={color} />,
-        }}
-      />
-    </Tab.Navigator>
+    <>
+      {/* Conditionally render the Landing Page first, then the Tab Navigator */}
+      {isLandingPage ? (
+        <LandingPage onStart={() => setIsLandingPage(false)} /> // Pass a function to hide the landing page
+      ) : (
+        <Tab.Navigator
+          screenOptions={{
+            headerShown: false,
+            tabBarStyle: {
+              backgroundColor: "hsl(11, 72%, 3%)",
+              borderTopColor: "transparent",
+              height: 60,
+              paddingBottom: 5,
+            },
+            tabBarActiveTintColor: "hsl(11, 100%, 60%)",
+            tabBarInactiveTintColor: "hsla(11, 20%, 64%, 0.5)",
+            tabBarLabelPosition: "below-icon",
+            tabBarIconStyle: {
+              marginBottom: 2,
+            },
+          }}
+        >
+          <Tab.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <TaskIcon color={color} size={size} />
+              ),
+              tabBarLabel: "Tasks",
+            }}
+          />
+          <Tab.Screen
+            name="Add Task"
+            component={AddTaskScreen}
+            options={{
+              tabBarIcon: () => <AddTaskIcon />,
+              tabBarLabel: "Add Task",
+            }}
+          />
+          <Tab.Screen
+            name="Settings"
+            component={SettingsScreen}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <Info size={size} color={color} />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+      )}
+    </>
   );
 }
 
+// For web, useEffect vs useLayoutEffect
 const useIsomorphicLayoutEffect =
   Platform.OS === "web" && typeof window === "undefined"
     ? React.useEffect
