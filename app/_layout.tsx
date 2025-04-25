@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as React from "react";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import { useState, useEffect } from "react";
 import "~/global.css";
@@ -136,8 +136,12 @@ export default function RootLayout() {
             name="Add Task"
             component={AddTaskScreen}
             options={{
-              tabBarIcon: () => <AddTaskIcon />,
-              tabBarLabel: "Add Task",
+              tabBarIcon: () => (
+                <View style={{ marginBottom: 10 }}>
+                  <AddTaskIcon />
+                </View>
+              ),
+              tabBarLabel: "",
             }}
           />
           <Tab.Screen

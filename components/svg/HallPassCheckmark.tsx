@@ -1,4 +1,5 @@
-import Svg, { G, Path, Defs, ClipPath, Rect } from "react-native-svg";
+import React from "react";
+import Svg, { ClipPath, Defs, G, Path, Rect } from "react-native-svg";
 
 export default function HallPassCheckmark() {
   return (
