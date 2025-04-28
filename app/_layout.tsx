@@ -9,8 +9,18 @@ import { Info } from "~/lib/icons/Info";
 import { useColorScheme } from "~/lib/useColorScheme";
 import AddTaskScreen from "./addTask";
 import HomeScreen from "./index";
-import SettingsScreen from "./settings";
+import CategoryScreen from "./category";
 import LandingPage from "./landingpage";
+
+export type TaskType = {
+  id: number;
+  title: string;
+  category: string;
+  isChecked: boolean;
+  notes?: string;
+  startDate?: Date | null;
+  endDate?: Date | null;
+};
 
 const Tab = createBottomTabNavigator();
 
@@ -81,6 +91,34 @@ export default function RootLayout() {
   // State to manage Landing Page visibility
   const [isLandingPage, setIsLandingPage] = useState(true);
 
+  const [categories, setCategories] = useState<string[]>([
+    "Work",
+    "Personal",
+    "Urgent",
+    "Shopping",
+    "Other",
+  ]);
+  const [tasks, setTasks] = useState<TaskType[]>([
+    {
+      id: 1,
+      title: "Task 1",
+      category: "Work",
+      isChecked: false,
+      notes: "",
+      startDate: null,
+      endDate: null,
+    },
+    {
+      id: 2,
+      title: "Task 2",
+      category: "Personal",
+      isChecked: true,
+      notes: "",
+      startDate: null,
+      endDate: null,
+    },
+  ]);
+
   useIsomorphicLayoutEffect(() => {
     if (hasMounted.current) {
       return;
@@ -124,17 +162,17 @@ export default function RootLayout() {
         >
           <Tab.Screen
             name="Home"
-            component={HomeScreen}
             options={{
               tabBarIcon: ({ color, size }) => (
                 <TaskIcon color={color} size={size} />
               ),
               tabBarLabel: "Tasks",
             }}
-          />
+          >
+            {() => <HomeScreen tasks={tasks} setTasks={setTasks} />}
+          </Tab.Screen>
           <Tab.Screen
             name="Add Task"
-            component={AddTaskScreen}
             options={{
               tabBarIcon: () => (
                 <View style={{ marginBottom: 10 }}>
@@ -143,16 +181,33 @@ export default function RootLayout() {
               ),
               tabBarLabel: "",
             }}
-          />
+          >
+            {() => (
+              <AddTaskScreen
+                categories={categories}
+                setCategories={setCategories}
+                tasks={tasks}
+                setTasks={setTasks}
+              />
+            )}
+          </Tab.Screen>
           <Tab.Screen
-            name="Settings"
-            component={SettingsScreen}
+            name="Category"
             options={{
               tabBarIcon: ({ color, size }) => (
                 <Info size={size} color={color} />
               ),
             }}
-          />
+          >
+            {() => (
+              <CategoryScreen
+                categories={categories}
+                setCategories={setCategories}
+                tasks={tasks}
+                setTasks={setTasks}
+              />
+            )}
+          </Tab.Screen>
         </Tab.Navigator>
       )}
     </>

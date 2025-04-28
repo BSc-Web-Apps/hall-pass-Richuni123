@@ -13,6 +13,7 @@ import TimeIcon from "~/components/svg/TimeIcon";
 import CategoryIcon from "~/components/svg/CategoryIcon";
 import HallPassCheckmark from "~/components/svg/HallPassCheckmark";
 import { Checkbox } from "~/components/ui/checkbox";
+import type { TaskType } from "./_layout";
 
 // Task Component
 interface TaskProps {
@@ -20,9 +21,9 @@ interface TaskProps {
   category: string;
   isChecked: boolean;
   id: number;
-  notes: string;
-  startDate: Date | null;
-  endDate: Date | null;
+  notes?: string;
+  startDate?: Date | null;
+  endDate?: Date | null;
   onDelete: (id: number) => void;
 }
 function Task({
@@ -30,9 +31,9 @@ function Task({
   category,
   isChecked,
   id,
-  notes,
-  startDate,
-  endDate,
+  notes = "",
+  startDate = null,
+  endDate = null,
   onDelete,
 }: TaskProps) {
   const [checked, setChecked] = useState(isChecked);
@@ -95,7 +96,19 @@ function Task({
   );
 }
 
-export default function AddTaskScreen() {
+interface AddTaskScreenProps {
+  categories: string[];
+  setCategories: React.Dispatch<React.SetStateAction<string[]>>;
+  tasks: TaskType[];
+  setTasks: React.Dispatch<React.SetStateAction<TaskType[]>>;
+}
+
+export default function AddTaskScreen({
+  categories,
+  setCategories,
+  tasks,
+  setTasks,
+}: AddTaskScreenProps) {
   const [taskText, setTaskText] = useState("");
   const [isTaskClicked, setIsTaskClicked] = useState(false);
   const [isCategoryVisible, setIsCategoryVisible] = useState(false);
@@ -106,14 +119,11 @@ export default function AddTaskScreen() {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [isNotesClicked, setIsNotesClicked] = useState(false);
-  const [tasks, setTasks] = useState<TaskProps[]>([]);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
 
   const taskInputRef = useRef<TextInput | null>(null);
   const notesInputRef = useRef<TextInput | null>(null);
-
-  const categories = ["Work", "Personal", "Urgent", "Shopping", "Other"];
 
   const onStartDateChange = (event: any, selectedDate: Date | undefined) => {
     if (event.type === "dismissed") {
@@ -152,7 +162,6 @@ export default function AddTaskScreen() {
         notes,
         startDate,
         endDate,
-        onDelete: handleDelete,
       },
     ]);
 
@@ -191,9 +200,9 @@ export default function AddTaskScreen() {
             title={task.title}
             category={task.category}
             isChecked={task.isChecked}
-            notes={task.notes}
-            startDate={task.startDate}
-            endDate={task.endDate}
+            notes={task.notes ?? ""}
+            startDate={task.startDate ?? null}
+            endDate={task.endDate ?? null}
             onDelete={handleDelete}
           />
         ))}
@@ -238,7 +247,7 @@ export default function AddTaskScreen() {
 
       {isCategoryVisible && (
         <View className="w-full p-4 border border-gray-300 rounded-lg">
-          {categories.map((category, index) => (
+          {categories.map((category: string, index: number) => (
             <TouchableOpacity
               key={index}
               onPress={() => {
