@@ -34,6 +34,7 @@ export default function HomeScreen({
     setTasks(
       tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
     );
+    setEditingTask(null); // Close the modal after saving
   };
 
   const handleCheckboxChange = (taskId: number, checked: boolean) => {
@@ -62,13 +63,15 @@ export default function HomeScreen({
         ))}
       </ScrollView>
 
-      <TaskEditModal
-        task={editingTask!}
-        isOpen={!!editingTask}
-        onClose={() => setEditingTask(null)}
-        onSave={handleTaskUpdate}
-        categories={categories}
-      />
+      {editingTask && (
+        <TaskEditModal
+          task={editingTask}
+          isOpen={!!editingTask}
+          onClose={() => setEditingTask(null)}
+          onSave={handleTaskUpdate}
+          categories={categories}
+        />
+      )}
     </View>
   );
 }
