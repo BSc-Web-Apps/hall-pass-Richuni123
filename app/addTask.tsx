@@ -12,89 +12,8 @@ import SaveTaskIcon from "~/components/svg/SaveTaskIcon";
 import TimeIcon from "~/components/svg/TimeIcon";
 import CategoryIcon from "~/components/svg/CategoryIcon";
 import HallPassCheckmark from "~/components/svg/HallPassCheckmark";
-import { Checkbox } from "~/components/ui/checkbox";
+import { Task } from "~/components/ui/task";
 import type { TaskType } from "./_layout";
-
-// Task Component
-interface TaskProps {
-  title: string;
-  category: string;
-  isChecked: boolean;
-  id: number;
-  notes?: string;
-  startDate?: Date | null;
-  endDate?: Date | null;
-  onDelete: (id: number) => void;
-}
-function Task({
-  title,
-  category,
-  isChecked,
-  id,
-  notes = "",
-  startDate = null,
-  endDate = null,
-  onDelete,
-}: TaskProps) {
-  const [checked, setChecked] = useState(isChecked);
-
-  return (
-    <View className="pl-20 pr-10 py-4 bg-blue-700 rounded-lg mb-2">
-      <View className="flex-row w-full border-opacity-50 items-center">
-        {/* Checkbox */}
-        <Checkbox
-          className={`h-5 w-5 border-2 mt-3 ${
-            checked ? "border-white bg-white" : "border-white bg-white "
-          }`}
-          checked={checked}
-          onCheckedChange={setChecked}
-        />
-
-        {/* Task details */}
-        <View className="flex-1 ml-4 mt-2">
-          <Text
-            className={`text-white font-bold ${checked ? "line-through" : ""}`}
-          >
-            {title}
-          </Text>
-          <Text className="text-white opacity-80">{category}</Text>
-          {notes ? (
-            <Text className="text-white opacity-70 mt-1 italic">{notes}</Text>
-          ) : null}
-          <View className="flex-row mt-1">
-            {startDate && (
-              <Text className="text-xs text-white opacity-60 mr-2">
-                Start:{" "}
-                {startDate instanceof Date
-                  ? startDate.toLocaleDateString()
-                  : startDate}
-              </Text>
-            )}
-            {endDate && (
-              <Text className="text-xs text-white opacity-60">
-                End:{" "}
-                {endDate instanceof Date
-                  ? endDate.toLocaleDateString()
-                  : endDate}
-              </Text>
-            )}
-          </View>
-        </View>
-
-        {/* Delete Button */}
-        <TouchableOpacity
-          onPress={() => onDelete(id)}
-          className="ml-2 w-7 h-7 bg-white rounded items-center justify-center"
-          style={{ borderWidth: 1, borderColor: "#FF5733" }}
-        >
-          <Text style={{ color: "#FF5733", fontWeight: "bold", fontSize: 16 }}>
-            ×
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
-}
 
 interface AddTaskScreenProps {
   categories: string[];
@@ -179,6 +98,14 @@ export default function AddTaskScreen({
     setTasks((prev) => prev.filter((task) => task.id !== id));
   };
 
+  const handleCheckChange = (taskId: number, checked: boolean) => {
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === taskId ? { ...task, isChecked: checked } : task
+      )
+    );
+  };
+
   return (
     <ScrollView
       className="flex-1 bg-background"
@@ -196,14 +123,9 @@ export default function AddTaskScreen({
         {tasks.map((task) => (
           <Task
             key={task.id}
-            id={task.id}
-            title={task.title}
-            category={task.category}
-            isChecked={task.isChecked}
-            notes={task.notes ?? ""}
-            startDate={task.startDate ?? null}
-            endDate={task.endDate ?? null}
+            task={task}
             onDelete={handleDelete}
+            onCheckChange={handleCheckChange}
           />
         ))}
       </View>

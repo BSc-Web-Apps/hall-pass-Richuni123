@@ -3,14 +3,17 @@ import * as React from "react";
 import { Platform, View } from "react-native";
 import Svg, { Path } from "react-native-svg";
 import { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import "~/global.css";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import { Info } from "~/lib/icons/Info";
 import { useColorScheme } from "~/lib/useColorScheme";
+import { STORAGE_KEYS } from "~/lib/constants";
 import AddTaskScreen from "./addTask";
 import HomeScreen from "./index";
 import CategoryScreen from "./category";
 import LandingPage from "./landingpage";
+import { PortalHost } from "@rn-primitives/portal";
 
 export type TaskType = {
   id: number;
@@ -91,33 +94,70 @@ export default function RootLayout() {
   // State to manage Landing Page visibility
   const [isLandingPage, setIsLandingPage] = useState(true);
 
-  const [categories, setCategories] = useState<string[]>([
-    "Work",
-    "Personal",
-    "Urgent",
-    "Shopping",
-    "Other",
-  ]);
-  const [tasks, setTasks] = useState<TaskType[]>([
-    {
-      id: 1,
-      title: "Task 1",
-      category: "Work",
-      isChecked: false,
-      notes: "",
-      startDate: null,
-      endDate: null,
-    },
-    {
-      id: 2,
-      title: "Task 2",
-      category: "Personal",
-      isChecked: true,
-      notes: "",
-      startDate: null,
-      endDate: null,
-    },
-  ]);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [tasks, setTasks] = useState<TaskType[]>([]);
+
+  // Load tasks from AsyncStorage on mount
+  useEffect(() => {
+    const loadTasks = async () => {
+      try {
+        const storedTasks = await AsyncStorage.getItem(STORAGE_KEYS.TASKS);
+        if (storedTasks) {
+          setTasks(JSON.parse(storedTasks));
+        }
+      } catch (error) {
+        console.error("Error loading tasks:", error);
+      }
+    };
+    loadTasks();
+  }, []);
+
+  // Save tasks to AsyncStorage whenever they change
+  useEffect(() => {
+    const saveTasks = async () => {
+      try {
+        await AsyncStorage.setItem(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
+      } catch (error) {
+        console.error("Error saving tasks:", error);
+      }
+    };
+    saveTasks();
+  }, [tasks]);
+
+  // Load categories from AsyncStorage on mount
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const storedCategories = await AsyncStorage.getItem(
+          STORAGE_KEYS.CATEGORIES
+        );
+        if (storedCategories) {
+          setCategories(JSON.parse(storedCategories));
+        } else {
+          // Set default categories if none exist
+          setCategories(["Work", "Personal", "Urgent", "Shopping", "Other"]);
+        }
+      } catch (error) {
+        console.error("Error loading categories:", error);
+      }
+    };
+    loadCategories();
+  }, []);
+
+  // Save categories to AsyncStorage whenever they change
+  useEffect(() => {
+    const saveCategories = async () => {
+      try {
+        await AsyncStorage.setItem(
+          STORAGE_KEYS.CATEGORIES,
+          JSON.stringify(categories)
+        );
+      } catch (error) {
+        console.error("Error saving categories:", error);
+      }
+    };
+    saveCategories();
+  }, [categories]);
 
   useIsomorphicLayoutEffect(() => {
     if (hasMounted.current) {
@@ -139,9 +179,8 @@ export default function RootLayout() {
 
   return (
     <>
-      {/* Conditionally render the Landing Page first, then the Tab Navigator */}
       {isLandingPage ? (
-        <LandingPage onStart={() => setIsLandingPage(false)} /> // Pass a function to hide the landing page
+        <LandingPage onStart={() => setIsLandingPage(false)} />
       ) : (
         <Tab.Navigator
           screenOptions={{
@@ -169,7 +208,13 @@ export default function RootLayout() {
               tabBarLabel: "Tasks",
             }}
           >
-            {() => <HomeScreen tasks={tasks} setTasks={setTasks} />}
+            {() => (
+              <HomeScreen
+                tasks={tasks}
+                setTasks={setTasks}
+                categories={categories}
+              />
+            )}
           </Tab.Screen>
           <Tab.Screen
             name="Add Task"

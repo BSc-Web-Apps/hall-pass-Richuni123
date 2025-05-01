@@ -6,10 +6,12 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
+  Pressable,
 } from "react-native";
 import HallPassCheckmark from "~/components/svg/HallPassCheckmark";
 import { Checkbox } from "~/components/ui/checkbox";
 import type { TaskType } from "./_layout";
+import { AlertDialog } from "~/components/ui/alert-dialog";
 
 // The shape of a task in your tasks array
 interface TaskData {
@@ -47,7 +49,7 @@ function Task({
   const [checked, setChecked] = useState(isChecked);
 
   return (
-    <View className="pl-20 pr-10 py-4 bg-blue-700 rounded-lg mb-2">
+    <View className="pl-10 pr-10 py-4 bg-blue-700 rounded-lg mb-2">
       <View className="flex-row w-full border-opacity-50 items-center">
         {/* Checkbox */}
         <Checkbox
@@ -69,24 +71,42 @@ function Task({
           {notes ? (
             <Text className="text-white opacity-70 mt-1 italic">{notes}</Text>
           ) : null}
-          <View className="flex-row mt-1">
-            {startDate && (
-              <Text className="text-xs text-white opacity-60 mr-2">
-                Start:{" "}
-                {startDate instanceof Date
-                  ? startDate.toLocaleDateString()
-                  : startDate}
-              </Text>
-            )}
-            {endDate && (
-              <Text className="text-xs text-white opacity-60">
-                End:{" "}
-                {endDate instanceof Date
-                  ? endDate.toLocaleDateString()
-                  : endDate}
-              </Text>
-            )}
-          </View>
+          {(startDate || endDate) && (
+            <View className="flex-row mt-1">
+              {startDate && (
+                <Text className="text-xs text-white opacity-60 mr-2">
+                  Start:{" "}
+                  {startDate instanceof Date
+                    ? startDate.toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
+                    : new Date(startDate).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                </Text>
+              )}
+              {endDate && (
+                <Text className="text-xs text-white opacity-60">
+                  End:{" "}
+                  {endDate instanceof Date
+                    ? endDate.toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })
+                    : new Date(endDate).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                </Text>
+              )}
+            </View>
+          )}
         </View>
 
         {/* Delete Button */}
@@ -119,6 +139,7 @@ export default function CategoryScreen({
 }: CategoryScreenProps) {
   const [modalVisible, setModalVisible] = useState(false);
   const [newCategory, setNewCategory] = useState("");
+  const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null);
 
   // Group tasks by category
   const grouped = categories.reduce(
@@ -132,6 +153,25 @@ export default function CategoryScreen({
   // Delete handler
   const handleDelete = (id: number) => {
     setTasks((prev) => prev.filter((task) => task.id !== id));
+  };
+
+  const handleAddCategory = () => {
+    if (newCategory.trim() && !categories.includes(newCategory.trim())) {
+      setCategories((prev) => [...prev, newCategory.trim()]);
+      setNewCategory("");
+    }
+  };
+
+  const handleDeleteCategory = (category: string) => {
+    // Remove the category
+    const updatedCategories = categories.filter((c) => c !== category);
+    setCategories(updatedCategories);
+
+    // Update tasks that were using this category
+    const updatedTasks = tasks.map((task) =>
+      task.category === category ? { ...task, category: "Other" } : task
+    );
+    setTasks(updatedTasks);
   };
 
   return (
@@ -151,39 +191,44 @@ export default function CategoryScreen({
         {[...categories]
           .sort((a, b) => a.localeCompare(b))
           .map((category) => (
-            <View
+            <Pressable
               key={category}
-              className="mb-6 bg-blue-700 rounded-lg p-4"
-              style={{
-                shadowColor: "#000",
-                shadowOpacity: 0.1,
-                shadowRadius: 6,
-                elevation: 2,
-              }}
+              onLongPress={() => setCategoryToDelete(category)}
+              delayLongPress={500}
             >
-              <Text className="text-xl font-bold text-orange-400 mb-2">
-                {category}
-              </Text>
-              {grouped[category] && grouped[category].length > 0 ? (
-                grouped[category].map((task) => (
-                  <Task
-                    key={task.id}
-                    id={task.id}
-                    title={task.title}
-                    category={task.category}
-                    isChecked={task.isChecked}
-                    notes={task.notes ?? ""}
-                    startDate={task.startDate ?? null}
-                    endDate={task.endDate ?? null}
-                    onDelete={handleDelete}
-                  />
-                ))
-              ) : (
-                <Text className="text-white opacity-60 italic">
-                  No tasks in this category.
+              <View
+                className="mb-6 bg-blue-700 rounded-lg p-4"
+                style={{
+                  shadowColor: "#000",
+                  shadowOpacity: 0.1,
+                  shadowRadius: 6,
+                  elevation: 2,
+                }}
+              >
+                <Text className="text-xl font-bold text-orange-400 mb-2">
+                  {category}
                 </Text>
-              )}
-            </View>
+                {grouped[category] && grouped[category].length > 0 ? (
+                  grouped[category].map((task) => (
+                    <Task
+                      key={task.id}
+                      id={task.id}
+                      title={task.title}
+                      category={task.category}
+                      isChecked={task.isChecked}
+                      notes={task.notes ?? ""}
+                      startDate={task.startDate ?? null}
+                      endDate={task.endDate ?? null}
+                      onDelete={handleDelete}
+                    />
+                  ))
+                ) : (
+                  <Text className="text-white opacity-60 italic">
+                    No tasks in this category.
+                  </Text>
+                )}
+              </View>
+            </Pressable>
           ))}
       </ScrollView>
 
@@ -191,7 +236,7 @@ export default function CategoryScreen({
       <View className="absolute bottom-10 left-0 right-0 items-center">
         <TouchableOpacity
           onPress={() => setModalVisible(true)}
-          className="bg-orange-700 rounded-full px-8 py-4 shadow-lg"
+          className="bg-pink-700 rounded-full px-8 py-4 shadow-lg"
           style={{
             elevation: 5,
           }}
@@ -253,13 +298,7 @@ export default function CategoryScreen({
               placeholderTextColor="#FF5733"
             />
             <TouchableOpacity
-              onPress={() => {
-                if (newCategory.trim()) {
-                  setCategories((prev) => [...prev, newCategory.trim()]);
-                  setNewCategory("");
-                  setModalVisible(false);
-                }
-              }}
+              onPress={handleAddCategory}
               style={{
                 backgroundColor: "#FF5733",
                 borderRadius: 8,
@@ -279,6 +318,19 @@ export default function CategoryScreen({
           </View>
         </View>
       </Modal>
+
+      <AlertDialog
+        isOpen={!!categoryToDelete}
+        title="Delete Category"
+        description={`Are you sure you want to delete "${categoryToDelete}"? Tasks in this category will be moved to "Other".`}
+        onConfirm={() => {
+          if (categoryToDelete) {
+            handleDeleteCategory(categoryToDelete);
+            setCategoryToDelete(null);
+          }
+        }}
+        onCancel={() => setCategoryToDelete(null)}
+      />
     </View>
   );
 }
