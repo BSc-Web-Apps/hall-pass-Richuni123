@@ -20,7 +20,7 @@ export function Task({ task, onDelete, onCheckChange }: TaskProps) {
   };
 
   return (
-    <View className="pr-10 py-4 bg-green-700 rounded-lg mb-2">
+    <View className="pr-10 py-4 bg-black rounded-lg mb-2">
       <View className="flex-row w-full border-opacity-50 items-center">
         <Checkbox
           className={` ml-8 h-7 w-7 border-2 mt-2 ${
@@ -80,10 +80,9 @@ export function Task({ task, onDelete, onCheckChange }: TaskProps) {
         </View>
         <TouchableOpacity
           onPress={() => onDelete(task.id)}
-          className="ml-2 w-7 h-7 bg-white rounded items-center justify-center"
-          style={{ borderWidth: 1, borderColor: "#FF5733" }}
+          className="ml-2 w-6 h-6 bg-white rounded items-center justify-center"
         >
-          <Text style={{ color: "#FF5733", fontWeight: "bold", fontSize: 16 }}>
+          <Text style={{ color: "#black", fontWeight: "bold", fontSize: 16 }}>
             ×
           </Text>
         </TouchableOpacity>

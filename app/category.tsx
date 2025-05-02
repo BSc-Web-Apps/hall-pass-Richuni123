@@ -49,11 +49,11 @@ function Task({
   const [checked, setChecked] = useState(isChecked);
 
   return (
-    <View className="pl-10 pr-10 py-4 bg-blue-700 rounded-lg mb-2">
+    <View className="pr-10 py-4 bg-grey-200 rounded-lg mb-2">
       <View className="flex-row w-full border-opacity-50 items-center">
         {/* Checkbox */}
         <Checkbox
-          className={`h-5 w-5 border-2 mt-3 ${
+          className={`ml-4 mr-4 h-7 w-7 border-2 mt-2${
             checked ? "border-white bg-white" : "border-white bg-white "
           }`}
           checked={checked}
@@ -112,10 +112,9 @@ function Task({
         {/* Delete Button */}
         <TouchableOpacity
           onPress={() => onDelete(id)}
-          className="ml-2 w-7 h-7 bg-white rounded items-center justify-center"
-          style={{ borderWidth: 1, borderColor: "#FF5733" }}
+          className="ml-2 w-6 h-6 bg-white rounded items-center justify-center"
         >
-          <Text style={{ color: "#FF5733", fontWeight: "bold", fontSize: 16 }}>
+          <Text style={{ color: "#black", fontWeight: "bold", fontSize: 16 }}>
             ×
           </Text>
         </TouchableOpacity>
@@ -197,7 +196,7 @@ export default function CategoryScreen({
               delayLongPress={500}
             >
               <View
-                className="mb-6 bg-blue-700 rounded-lg p-4"
+                className="mb-6 bg-black rounded-lg p-4"
                 style={{
                   shadowColor: "#000",
                   shadowOpacity: 0.1,
@@ -205,7 +204,7 @@ export default function CategoryScreen({
                   elevation: 2,
                 }}
               >
-                <Text className="text-xl font-bold text-orange-400 mb-2">
+                <Text className="text-xl font-bold text-white mb-2">
                   {category}
                 </Text>
                 {grouped[category] && grouped[category].length > 0 ? (
@@ -236,12 +235,12 @@ export default function CategoryScreen({
       <View className="absolute bottom-10 left-0 right-0 items-center">
         <TouchableOpacity
           onPress={() => setModalVisible(true)}
-          className="bg-pink-700 rounded-full px-8 py-4 shadow-lg"
+          className="bg-orange-800 rounded-full px-8 py-4 shadow-lg"
           style={{
             elevation: 5,
           }}
         >
-          <Text className="text-black font-bold text-lg">+ Add Category</Text>
+          <Text className="text-white font-bold text-lg">+ Add Category</Text>
         </TouchableOpacity>
       </View>
 
@@ -262,20 +261,20 @@ export default function CategoryScreen({
         >
           <View
             style={{
-              backgroundColor: "#fff",
+              backgroundColor: "#000",
               borderRadius: 16,
               padding: 24,
               minWidth: 250,
               alignItems: "center",
-              shadowColor: "#000",
-              shadowOpacity: 0.2,
+              shadowColor: "#333",
+              shadowOpacity: 1,
               shadowRadius: 8,
               elevation: 5,
             }}
           >
             <Text
               style={{
-                color: "#FF5733",
+                color: "#fff",
                 fontWeight: "bold",
                 fontSize: 18,
                 marginBottom: 12,
@@ -289,13 +288,13 @@ export default function CategoryScreen({
               placeholder="Category name"
               style={{
                 borderWidth: 1,
-                borderColor: "#FF5733",
+                borderColor: "#fff",
                 borderRadius: 8,
                 padding: 8,
                 width: 180,
                 marginBottom: 16,
               }}
-              placeholderTextColor="#FF5733"
+              placeholderTextColor="#fff"
             />
             <TouchableOpacity
               onPress={handleAddCategory}
@@ -313,7 +312,7 @@ export default function CategoryScreen({
               onPress={() => setModalVisible(false)}
               style={{ marginTop: 4 }}
             >
-              <Text style={{ color: "#FF5733" }}>Cancel</Text>
+              <Text style={{ color: "#fff" }}>Cancel</Text>
             </TouchableOpacity>
           </View>
         </View>
