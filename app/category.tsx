@@ -49,12 +49,12 @@ function Task({
   const [checked, setChecked] = useState(isChecked);
 
   return (
-    <View className="pr-10 py-4 bg-grey-200 rounded-lg mb-2">
+    <View className="pr-10 py-4 bg-grey-200 rounded-lg mb-2 border-2 border-white ">
       <View className="flex-row w-full border-opacity-50 items-center">
         {/* Checkbox */}
         <Checkbox
-          className={`ml-4 mr-4 h-7 w-7 border-2 mt-2${
-            checked ? "border-white bg-white" : "border-white bg-white "
+          className={`ml-4 mr-4 h-7 w-7 border-2 border-gray-400 mt-2${
+            checked ? "border-gray-400 bg-gray-400" : "border-gray-400 bg-black"
           }`}
           checked={checked}
           onCheckedChange={setChecked}
@@ -112,7 +112,7 @@ function Task({
         {/* Delete Button */}
         <TouchableOpacity
           onPress={() => onDelete(id)}
-          className="ml-2 w-6 h-6 bg-white rounded items-center justify-center"
+          className="ml-2 w-6 h-6 bg-gray-400 rounded items-center justify-center"
         >
           <Text style={{ color: "#black", fontWeight: "bold", fontSize: 16 }}>
             ×
@@ -270,6 +270,8 @@ export default function CategoryScreen({
               shadowOpacity: 1,
               shadowRadius: 8,
               elevation: 5,
+              borderWidth: 1,
+              borderColor: "#fff",
             }}
           >
             <Text
@@ -293,6 +295,7 @@ export default function CategoryScreen({
                 padding: 8,
                 width: 180,
                 marginBottom: 16,
+                color: "#fff",
               }}
               placeholderTextColor="#fff"
             />

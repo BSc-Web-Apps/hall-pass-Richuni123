@@ -136,7 +136,7 @@ export default function AddTaskScreen({
           setIsTaskClicked(true);
           taskInputRef.current?.focus();
         }}
-        className="w-full mb-4 p-4 border border-gray-300 rounded-lg"
+        className="w-full mb-4 p-4 border border-gray-300 rounded-lg "
       >
         <View className="relative flex-row items-center">
           <TimeIcon />
@@ -161,7 +161,7 @@ export default function AddTaskScreen({
       >
         <View className="flex-row items-center">
           <CategoryIcon />
-          <Text className="ml-2 text-orange-400">
+          <Text className="ml-2 text-gray-400">
             {selectedCategory || "Category"}
           </Text>
         </View>
@@ -178,14 +178,14 @@ export default function AddTaskScreen({
               }}
               className="p-2"
             >
-              <Text className="text-foreground">{category}</Text>
+              <Text className="text-gray-400">{category}</Text>
             </TouchableOpacity>
           ))}
         </View>
       )}
 
       {/* Notes Input */}
-      <View className="w-full mb-4 p-4 border border-gray-300 rounded-lg">
+      <View className="w-full mb-4 mt-4 p-4 border border-gray-300 rounded-lg">
         <TouchableOpacity
           onPress={() => {
             setIsNotesClicked(true);
@@ -219,7 +219,7 @@ export default function AddTaskScreen({
         <View className="flex-1 mr-2">
           <TouchableOpacity
             onPress={() => setShowStartDatePicker(true)}
-            className="p-4 border border-gray-300 rounded-lg bg-orange-300"
+            className="p-4 border border-gray-300 rounded-lg bg-grey-300"
           >
             <View className="relative flex-row items-center">
               {!startDate && <Text className="text-gray-400">Start Date</Text>}
@@ -243,7 +243,7 @@ export default function AddTaskScreen({
         <View className="flex-1 ml-2">
           <TouchableOpacity
             onPress={() => setShowEndDatePicker(true)}
-            className="p-4 border border-gray-300 rounded-lg bg-orange-300"
+            className="p-4 border border-gray-300 rounded-lg bg-grey-300"
           >
             <View className="relative flex-row items-center">
               {!endDate && <Text className="text-gray-400">End Date</Text>}

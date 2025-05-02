@@ -24,7 +24,7 @@ export function Task({ task, onDelete, onCheckChange }: TaskProps) {
       <View className="flex-row w-full border-opacity-50 items-center">
         <Checkbox
           className={` ml-8 h-7 w-7 border-2 mt-2 ${
-            checked ? "border-white bg-white" : "border-white bg-white"
+            checked ? "border-gray-400 bg-gray-400" : "border-gray-400 bg-black"
           }`}
           checked={checked}
           onCheckedChange={handleCheckChange}
@@ -80,7 +80,7 @@ export function Task({ task, onDelete, onCheckChange }: TaskProps) {
         </View>
         <TouchableOpacity
           onPress={() => onDelete(task.id)}
-          className="ml-2 w-6 h-6 bg-white rounded items-center justify-center"
+          className="ml-2 w-6 h-6 bg-gray-400 rounded items-center justify-center"
         >
           <Text style={{ color: "#black", fontWeight: "bold", fontSize: 16 }}>
             ×

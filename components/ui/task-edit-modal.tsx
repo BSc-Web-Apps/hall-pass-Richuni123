@@ -35,11 +35,13 @@ export function TaskEditModal({
       onRequestClose={onClose}
     >
       <View className="flex-1 bg-black/50 justify-center items-center">
-        <View className="bg-card rounded-lg p-6 w-[90%] max-w-sm">
+        <View
+          className="bg-card rounded-lg p-6 w-[90%] max-w-sm"
+          style={{ borderWidth: 1, borderColor: "#fff" }}
+        >
           <Text className="text-xl font-semibold text-foreground mb-4">
             Edit Task
           </Text>
-
           <TextInput
             className="bg-input text-foreground p-3 rounded-lg mb-3"
             placeholder="Task title"
@@ -48,7 +50,6 @@ export function TaskEditModal({
               setEditedTask({ ...editedTask, title: text })
             }
           />
-
           <View className="mb-3">
             <Text className="text-foreground mb-1">Category</Text>
             <View className="flex-row flex-wrap gap-2">
@@ -73,7 +74,6 @@ export function TaskEditModal({
               ))}
             </View>
           </View>
-
           <TextInput
             className="bg-input text-foreground p-3 rounded-lg mb-3"
             placeholder="Notes"
@@ -83,7 +83,6 @@ export function TaskEditModal({
             }
             multiline
           />
-
           <View className="flex-row justify-between mb-3">
             <Pressable
               onPress={() => setShowStartDatePicker(true)}
@@ -106,7 +105,6 @@ export function TaskEditModal({
               </Text>
             </Pressable>
           </View>
-
           {(showStartDatePicker || showEndDatePicker) && (
             <DateTimePicker
               value={
@@ -132,7 +130,6 @@ export function TaskEditModal({
               }}
             />
           )}
-
           <View className="flex-row justify-end gap-3 mt-4">
             <Pressable
               onPress={onClose}
