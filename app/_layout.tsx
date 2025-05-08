@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import "~/global.css";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
-import { Info } from "~/lib/icons/Info";
+import { SquareMenu } from "~/lib/icons/SquareMenu";
 import { useColorScheme } from "~/lib/useColorScheme";
 import { STORAGE_KEYS } from "~/lib/constants";
 import AddTaskScreen from "./addTask";
@@ -240,7 +240,7 @@ export default function RootLayout() {
             name="Category"
             options={{
               tabBarIcon: ({ color, size }) => (
-                <Info size={size} color={color} />
+                <SquareMenu size={size} color={color} />
               ),
             }}
           >
