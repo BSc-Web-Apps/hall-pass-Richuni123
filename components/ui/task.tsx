@@ -20,7 +20,11 @@ export function Task({ task, onDelete, onCheckChange }: TaskProps) {
   };
 
   return (
-    <View className="pr-10 py-4 bg-black rounded-lg mb-2">
+    <View className="pr-10 py-4 bg-black rounded-lg  mb-2">
+      <View
+        style={{ width: "70%", left: "20%" }}
+        className="absolute bottom-0 border-b-2 border-b-gray-700"
+      />
       <View className="flex-row w-full border-opacity-50 items-center">
         <Checkbox
           className={` ml-8 h-7 w-7 border-2 mt-2 ${
