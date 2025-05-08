@@ -161,7 +161,7 @@ export default function AddTaskScreen({
       >
         <View className="flex-row items-center">
           <CategoryIcon />
-          <Text className="ml-2 text-gray-400">
+          <Text className="ml-2 text-white">
             {selectedCategory || "Category"}
           </Text>
         </View>
@@ -178,7 +178,7 @@ export default function AddTaskScreen({
               }}
               className="p-2"
             >
-              <Text className="text-gray-400">{category}</Text>
+              <Text className="text-white">{category}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -224,7 +224,7 @@ export default function AddTaskScreen({
             <View className="relative flex-row items-center">
               {!startDate && <Text className="text-gray-400">Start Date</Text>}
               {startDate && (
-                <Text className="text-black">
+                <Text className="text-white">
                   {startDate.toLocaleDateString()}
                 </Text>
               )}
@@ -248,7 +248,7 @@ export default function AddTaskScreen({
             <View className="relative flex-row items-center">
               {!endDate && <Text className="text-gray-400">End Date</Text>}
               {endDate && (
-                <Text className="text-black">
+                <Text className="text-white">
                   {endDate.toLocaleDateString()}
                 </Text>
               )}
