@@ -51,6 +51,10 @@ export default function HomeScreen({
 
   return (
     <View className="flex-1 bg-background">
+      <View className="w-full pt-20 pb-6 flex-row items-center justify-center gap-4">
+        <Text className="text-4xl font-bold text-white mr-2">HallPass</Text>
+        <HallPassCheckmark />
+      </View>
       <ScrollView className="flex-1 p-4">
         {tasks.map((task) => (
           <TouchableOpacity key={task.id} onPress={() => handleTaskPress(task)}>
